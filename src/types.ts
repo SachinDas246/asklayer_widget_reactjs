@@ -13,7 +13,6 @@ export type AskLayerMessage = {
 export type AskLayerWidgetProps = {
   apiBaseUrl: string
   apiKey: string
-  siteId: string | number
   placeholder?: string
   suggestedQuestions?: string[]
   brandName?: string

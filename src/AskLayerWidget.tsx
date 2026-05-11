@@ -16,7 +16,6 @@ function createId() {
 export function AskLayerWidget({
   apiBaseUrl,
   apiKey,
-  siteId,
   placeholder = 'Ask anything about this site…',
   suggestedQuestions = DEFAULT_SUGGESTIONS,
   brandName = 'AskLayer',
@@ -64,7 +63,7 @@ export function AskLayerWidget({
     setTimeout(() => followUpRef.current?.focus(), 100)
 
     try {
-      const response = await sendWidgetMessage({ apiBaseUrl, apiKey, siteId, message: text, history })
+      const response = await sendWidgetMessage({ apiBaseUrl, apiKey, message: text, history })
       setMessages((prev) => [
         ...prev,
         {

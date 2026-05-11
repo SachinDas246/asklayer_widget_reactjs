@@ -21,7 +21,6 @@ export function HomePage() {
     <AskLayerWidget
       apiBaseUrl={import.meta.env.VITE_ASKLAYER_API_URL}
       apiKey={import.meta.env.VITE_ASKLAYER_API_KEY}
-      siteId={import.meta.env.VITE_ASKLAYER_SITE_ID}
       placeholder="Ask anything about this site..."
       suggestedQuestions={[
         'How does this work?',
@@ -38,7 +37,6 @@ export function HomePage() {
 ```env
 VITE_ASKLAYER_API_URL=https://api.asklayer.ai
 VITE_ASKLAYER_API_KEY=asklayer_live_xxx
-VITE_ASKLAYER_SITE_ID=site_xxx
 ```
 
 ## Backend contract
@@ -54,7 +52,6 @@ Body:
 
 ```json
 {
-  "site_id": "site_xxx",
   "message": "How does pricing work?",
   "history": [
     { "role": "user", "content": "What does this do?" },

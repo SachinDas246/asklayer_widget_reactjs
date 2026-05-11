@@ -3,7 +3,6 @@ import type { AskLayerMessage, WidgetChatResponse } from './types'
 type SendWidgetMessageArgs = {
   apiBaseUrl: string
   apiKey: string
-  siteId: string | number
   message: string
   history: Pick<AskLayerMessage, 'role' | 'content'>[]
 }
@@ -11,7 +10,6 @@ type SendWidgetMessageArgs = {
 export async function sendWidgetMessage({
   apiBaseUrl,
   apiKey,
-  siteId,
   message,
   history,
 }: SendWidgetMessageArgs): Promise<WidgetChatResponse> {
@@ -23,7 +21,6 @@ export async function sendWidgetMessage({
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      site_id: siteId,
       message,
       history,
     }),
