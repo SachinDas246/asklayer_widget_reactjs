@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
-import { sendWidgetMessage } from './api'
-import type { AskLayerMessage, AskLayerWidgetProps } from './types'
+import { sendWidgetMessage } from '../api'
+import type { AskLayerMessage } from '../types'
+import type { HeroSearchWidgetProps } from './types'
 import './styles.css'
 
 const DEFAULT_SUGGESTIONS = [
@@ -13,7 +14,7 @@ function createId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`
 }
 
-export function AskLayerWidget({
+export function HeroSearchWidget({
   apiBaseUrl,
   apiKey,
   placeholder = 'Ask anything about this site…',
@@ -21,7 +22,7 @@ export function AskLayerWidget({
   brandName = 'AskLayer',
   className = '',
   onError,
-}: AskLayerWidgetProps) {
+}: HeroSearchWidgetProps) {
   const [input, setInput] = useState('')
   const [followUp, setFollowUp] = useState('')
   const [messages, setMessages] = useState<AskLayerMessage[]>([])
