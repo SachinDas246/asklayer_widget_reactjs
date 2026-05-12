@@ -1,5 +1,5 @@
 {
-  "name": "@asklayer/widget",
+  "name": "@asklayer/widget-reactjs",
   "version": "0.1.0",
   "description": "React widget for embedding AskLayer AI search on customer websites.",
   "type": "module",
@@ -8,7 +8,8 @@
   "types": "./dist/index.d.ts",
   "style": "./dist/asklayer-widget.css",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "exports": {
     ".": {
@@ -19,7 +20,8 @@
     "./styles.css": "./dist/asklayer-widget.css"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && vite build"
+    "build": "tsc -p tsconfig.build.json && vite build",
+    "semantic-release": "semantic-release"
   },
   "peerDependencies": {
     "react": ">=18",
@@ -29,9 +31,13 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
-    "typescript": "~6.0.2",
-    "vite": "^8.0.10",
     "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "react-dom": "^19.2.5",
+    "semantic-release": "^25.0.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.10"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

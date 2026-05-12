@@ -5,10 +5,8 @@ React package for embedding an AskLayer AI search/chat bar inside customer websi
 ## Install from GitHub
 
 ```bash
-npm install github:YOUR_ORG/asklayer-widget
+npm install @asklayer/widget-reactjs
 ```
-
-For the local demo in this repo, use the sibling `widget_demo` app.
 
 ## Usage
 
