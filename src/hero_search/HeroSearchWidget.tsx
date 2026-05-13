@@ -93,64 +93,79 @@ export function HeroSearchWidget({
     ask(followUp)
   }
 
-  function close() {
-    setIsOpen(false)
-  }
-
   return (
-    <div ref={widgetRef} className={`asklayer-widget${isOpen ? ' asklayer-open' : ''} ${className}`}>
-
-      {/* ── LEFT: compact chat panel (fixed, floats over page) ── */}
+    <div
+      ref={widgetRef}
+      className={`asklayer-widget relative w-full max-w-[780px] mx-auto text-sm text-al-text ${className}`}
+    >
+      {/* ── Floating chat panel ── */}
       <div
-        className="asklayer-chat-panel"
-        style={panelPos ? { left: panelPos.left, top: panelPos.top } : undefined}
+        className={[
+          'fixed z-[9999] w-[360px] h-[580px] flex flex-col',
+          'border border-al-border rounded-2xl bg-al-surface overflow-hidden',
+          'shadow-[0_4px_16px_rgba(0,0,0,0.08),0_12px_40px_rgba(0,0,0,0.10)]',
+          'transition-[opacity,transform] duration-[220ms] ease-[cubic-bezier(0.16,1,0.3,1)]',
+          isOpen
+            ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
+            : 'opacity-0 pointer-events-none -translate-y-1.5 scale-[0.98]',
+        ].join(' ')}
+        style={panelPos ? { left: panelPos.left, top: panelPos.top } : { left: 0, top: 0 }}
         aria-live="polite"
       >
-        {/* header */}
-        <div className="asklayer-chat-header">
-          <div className="asklayer-chat-brand">
-            <div className="asklayer-chat-brand-icon" aria-hidden="true">
+        {/* Header */}
+        <div className="flex items-center justify-between px-3.5 py-[13px] border-b border-al-border-soft">
+          <div className="flex items-center gap-2.5">
+            <div className="grid place-items-center w-[34px] h-[34px] rounded-[10px] bg-al-dark text-white shrink-0">
               <SparkleIcon size={14} />
             </div>
-            <div className="asklayer-chat-brand-text">
-              <span className="asklayer-chat-brand-name">{brandName}</span>
-              <span className="asklayer-chat-brand-sub">Ask me anything</span>
+            <div className="flex flex-col gap-px">
+              <span className="text-[13.5px] font-[620] tracking-[-0.02em] text-al-text leading-tight">
+                {brandName}
+              </span>
+              <span className="text-[11.5px] text-al-text-muted leading-tight">Ask me anything</span>
             </div>
           </div>
           <button
-            className="asklayer-close-btn"
             type="button"
-            onClick={close}
+            onClick={() => setIsOpen(false)}
             aria-label="Close chat"
+            className="grid place-items-center w-6.5 h-6.5 rounded-lg border-0 bg-transparent text-al-text-soft cursor-pointer transition-[color,background] duration-150 hover:text-al-text hover:bg-al-border-soft"
           >
             <CloseIcon />
           </button>
         </div>
 
-        {/* messages */}
-        <div className="asklayer-messages">
+        {/* Messages */}
+        <div className="asklayer-messages flex-1 overflow-y-auto flex flex-col gap-3.5 p-4 px-3.5 bg-al-surface">
           {messages.map((msg) => (
             <MessageRow key={msg.id} message={msg} />
           ))}
 
           {isLoading && (
-            <div className="asklayer-row assistant">
-              <div className="asklayer-typing" aria-label="Thinking…">
-                <span /><span /><span />
+            <div className="flex justify-start">
+              <div className="flex gap-1 items-center px-3 py-2.5" aria-label="Thinking…">
+                <span className="block w-[5px] h-[5px] rounded-full bg-al-text-soft [animation:al-bounce_900ms_infinite_ease-in-out]" />
+                <span className="block w-[5px] h-[5px] rounded-full bg-al-text-soft [animation:al-bounce_900ms_130ms_infinite_ease-in-out]" />
+                <span className="block w-[5px] h-[5px] rounded-full bg-al-text-soft [animation:al-bounce_900ms_260ms_infinite_ease-in-out]" />
               </div>
             </div>
           )}
 
           {error && (
-            <div className="asklayer-error" role="alert">{error}</div>
+            <div className="text-[12.5px] text-[#be123c] py-1 px-0.5" role="alert">
+              {error}
+            </div>
           )}
 
           <div ref={scrollRef} />
         </div>
 
-        {/* follow-up input */}
-        <div className="asklayer-chat-footer">
-          <form className="asklayer-followup-form" onSubmit={handleFollowUpSubmit}>
+        {/* Follow-up input */}
+        <div className="px-3 pt-2.5 pb-3 border-t border-al-border-soft">
+          <form
+            onSubmit={handleFollowUpSubmit}
+            className="flex items-center gap-2 pl-3 pr-2 py-2 border border-al-border rounded-xl bg-al-surface-2 transition-[border-color,background,box-shadow] duration-[180ms] focus-within:border-[#a1a1aa] focus-within:bg-al-surface focus-within:shadow-[0_0_0_3px_rgba(0,0,0,0.05)]"
+          >
             <input
               ref={followUpRef}
               value={followUp}
@@ -159,18 +174,27 @@ export function HeroSearchWidget({
               aria-label="Ask a follow-up question"
               disabled={isLoading}
               autoComplete="off"
+              className="flex-1 min-w-0 border-0 outline-none bg-transparent text-[13px] text-al-text placeholder:text-al-text-soft"
             />
-            <button type="submit" aria-label="Send" disabled={!followUp.trim() || isLoading}>
-              {isLoading ? <span className="asklayer-spinner" /> : <SendIcon />}
+            <button
+              type="submit"
+              aria-label="Send"
+              disabled={!followUp.trim() || isLoading}
+              className="grid place-items-center w-7 h-7 shrink-0 border-0 rounded-lg bg-al-border-soft text-al-text-muted cursor-pointer transition-[background,color] duration-150 enabled:hover:bg-al-dark enabled:hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {isLoading ? <Spinner /> : <SendIcon />}
             </button>
           </form>
         </div>
       </div>
 
-      {/* ── RIGHT: hero search bar ── */}
-      <div className="asklayer-search-area">
-        <form className="asklayer-searchbar" onSubmit={handleSearchSubmit}>
-          <span className="asklayer-searchbar-icon" aria-hidden="true">
+      {/* ── Hero search bar ── */}
+      <div className="flex flex-col gap-[13px]">
+        <form
+          onSubmit={handleSearchSubmit}
+          className="flex items-center gap-3 pl-5 pr-2.5 py-2.5 border-[1.5px] border-al-border rounded-full bg-al-surface min-h-[64px] shadow-[0_1px_3px_rgba(0,0,0,0.06),0_6px_24px_rgba(0,0,0,0.06)] transition-[border-color,box-shadow] duration-200 focus-within:border-[#a1a1aa] focus-within:shadow-[0_1px_3px_rgba(0,0,0,0.06),0_6px_24px_rgba(0,0,0,0.08),0_0_0_3px_rgba(0,0,0,0.05)]"
+        >
+          <span className="grid place-items-center text-al-text-soft shrink-0" aria-hidden="true">
             <SparkleIcon size={18} />
           </span>
           <input
@@ -179,21 +203,32 @@ export function HeroSearchWidget({
             placeholder={placeholder}
             aria-label={placeholder}
             autoComplete="off"
+            className="flex-1 min-w-0 border-0 outline-none bg-transparent text-[17px] font-[420] tracking-[-0.01em] text-al-text placeholder:text-al-text-soft"
           />
-          <button type="submit" aria-label="Ask" disabled={!input.trim() || isLoading}>
-            {isLoading ? <span className="asklayer-spinner asklayer-spinner--dark" /> : <ArrowUpIcon />}
+          <button
+            type="submit"
+            aria-label="Ask"
+            disabled={!input.trim() || isLoading}
+            className="grid place-items-center w-[42px] h-[42px] shrink-0 border-0 rounded-full bg-al-border-soft text-al-text-muted cursor-pointer transition-[background,color,transform] duration-150 enabled:hover:bg-al-dark enabled:hover:text-white enabled:hover:scale-[1.04] disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            {isLoading ? <Spinner dark /> : <ArrowUpIcon />}
           </button>
         </form>
 
-        <div className="asklayer-suggestions">
+        <div className="flex flex-wrap gap-2">
           {suggestedQuestions.map((q) => (
-            <button key={q} type="button" onClick={() => ask(q)} disabled={isLoading}>
+            <button
+              key={q}
+              type="button"
+              onClick={() => ask(q)}
+              disabled={isLoading}
+              className="h-[34px] px-[15px] border border-al-border rounded-full bg-al-surface text-al-text-muted text-[13px] cursor-pointer transition-[border-color,color,background] duration-150 enabled:hover:border-[#a1a1aa] enabled:hover:text-al-text enabled:hover:bg-al-surface-2 disabled:opacity-45 disabled:cursor-not-allowed"
+            >
               {q}
             </button>
           ))}
         </div>
       </div>
-
     </div>
   )
 }
@@ -201,18 +236,30 @@ export function HeroSearchWidget({
 function MessageRow({ message }: { message: AskLayerMessage }) {
   const isUser = message.role === 'user'
   return (
-    <div className={`asklayer-row ${isUser ? 'user' : 'assistant'}`}>
+    <div
+      className={`flex [animation:al-msg-in_200ms_cubic-bezier(0.16,1,0.3,1)_both] ${
+        isUser ? 'justify-end' : 'justify-start'
+      }`}
+    >
       {isUser ? (
-        <div className="asklayer-user-bubble">{message.content}</div>
+        <div className="max-w-[75%] px-[13px] py-2 rounded-[18px_18px_4px_18px] bg-al-dark text-white text-[13.5px] leading-[1.5] break-words">
+          {message.content}
+        </div>
       ) : (
-        <div className="asklayer-ai-text">
-          <p>{message.content}</p>
+        <div className="max-w-[90%] text-[13.5px] leading-[1.62] text-al-text-2">
+          <p className="m-0 whitespace-pre-wrap [overflow-wrap:anywhere]">{message.content}</p>
           {message.sources && message.sources.length > 0 && (
-            <div className="asklayer-sources">
+            <div className="flex flex-wrap gap-[5px] mt-2">
               {message.sources.map((s) => (
-                <a key={s.url} href={s.url} target="_blank" rel="noreferrer">
+                <a
+                  key={s.url}
+                  href={s.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 max-w-[160px] px-[9px] py-[3px] border border-al-border rounded-full text-al-text-muted bg-al-surface-2 text-[11px] font-medium no-underline overflow-hidden transition-[border-color,color,background] duration-150 hover:border-al-dark hover:text-al-dark"
+                >
                   <ExternalLinkIcon />
-                  <span>{s.title || s.url}</span>
+                  <span className="overflow-hidden text-ellipsis whitespace-nowrap">{s.title || s.url}</span>
                 </a>
               ))}
             </div>
@@ -220,6 +267,18 @@ function MessageRow({ message }: { message: AskLayerMessage }) {
         </div>
       )}
     </div>
+  )
+}
+
+function Spinner({ dark = false }: { dark?: boolean }) {
+  return (
+    <span
+      className={[
+        'block w-[14px] h-[14px] rounded-full border-2 border-t-current',
+        '[animation:al-spin_700ms_linear_infinite]',
+        dark ? 'border-white/30 border-t-white' : 'border-black/15',
+      ].join(' ')}
+    />
   )
 }
 
